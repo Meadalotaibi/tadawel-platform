@@ -1,0 +1,21 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "Backend API with health check endpoint",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "multer": "^2.0.2",
+    "pdfkit": "^0.15.0",
+    "pptxgenjs": "^3.12.0",
+    "xlsx": "^0.18.5"
+  }
+}
