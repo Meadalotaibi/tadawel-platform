@@ -1,0 +1,208 @@
+/* ===========================================
+   Shared Glassmorphism Chart Container Styles
+   Matches the main app theme for consistency
+   =========================================== */
+
+/* Chart Container */
+.chart-container {
+  width: 100%;
+  margin-top: 2rem;
+}
+
+/* Adjust margin when inside dashboard container */
+.charts-dashboard-container .chart-container {
+  margin-top: 0;
+}
+
+/* Glass Effect Container - Matches .glass-card theme */
+.glass-chart {
+  background: linear-gradient(
+    145deg,
+    rgba(16, 185, 129, 0.04) 0%,
+    rgba(0, 0, 0, 0.35) 100%
+  );
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid rgba(16, 185, 129, 0.15);
+  border-radius: 24px;
+  padding: 1.75rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 20px 40px -10px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(16, 185, 129, 0.03) inset;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effect */
+.glass-chart:hover {
+  transform: translateY(-2px);
+  border-color: rgba(16, 185, 129, 0.25);
+  box-shadow:
+    0 25px 50px -12px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(16, 185, 129, 0.08),
+    0 0 0 1px rgba(16, 185, 129, 0.06) inset;
+}
+
+/* Animated top border gradient */
+.glass-chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(16, 185, 129, 0.4) 30%,
+    rgba(52, 211, 153, 0.6) 50%,
+    rgba(16, 185, 129, 0.4) 70%,
+    transparent 100%
+  );
+}
+
+/* Corner accent glow */
+.glass-chart::after {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Chart Title */
+.chart-title {
+  color: rgba(255, 255, 255, 0.95);
+  font-family: 'Outfit', 'Cairo', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(16, 185, 129, 0.12);
+  letter-spacing: 0.3px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Chart Wrapper */
+.chart-wrapper {
+  position: relative;
+  height: 380px;
+  width: 100%;
+  z-index: 1;
+}
+
+/* ===========================================
+   Responsive Adjustments
+   =========================================== */
+
+@media (max-width: 768px) {
+  .glass-chart {
+    padding: 1.25rem;
+    border-radius: 20px;
+  }
+
+  .chart-title {
+    font-size: 1.05rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .chart-wrapper {
+    height: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .glass-chart {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .chart-title {
+    font-size: 1rem;
+  }
+
+  .chart-wrapper {
+    height: 260px;
+  }
+}
+
+/* ===========================================
+   Nested Chart Styles (inside dashboard container)
+   Lighter effect to avoid double-glass
+   =========================================== */
+
+.charts-dashboard-container .glass-chart {
+  /* Lighter background when nested */
+  background: linear-gradient(
+    145deg,
+    rgba(16, 185, 129, 0.03) 0%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  
+  /* Reduced blur for nested glass */
+  backdrop-filter: blur(10px) saturate(150%);
+  -webkit-backdrop-filter: blur(10px) saturate(150%);
+  
+  /* Subtler border */
+  border: 1px solid rgba(16, 185, 129, 0.1);
+  
+  /* Lighter shadow when nested */
+  box-shadow:
+    0 8px 24px -8px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(16, 185, 129, 0.02) inset;
+}
+
+.charts-dashboard-container .glass-chart:hover {
+  transform: translateY(-1px);
+  border-color: rgba(16, 185, 129, 0.18);
+  box-shadow:
+    0 12px 32px -8px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(16, 185, 129, 0.05),
+    0 0 0 1px rgba(16, 185, 129, 0.04) inset;
+}
+
+/* Subtle corner accent when nested */
+.charts-dashboard-container .glass-chart::after {
+  width: 150px;
+  height: 150px;
+  top: -60px;
+  right: -60px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.04) 0%, transparent 70%);
+}
+
+/* ===========================================
+   Accessibility
+   =========================================== */
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .glass-chart {
+    border-width: 2px;
+    background: rgba(6, 78, 59, 0.2);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .glass-chart {
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    transition: none;
+  }
+
+  .glass-chart:hover {
+    transform: none;
+  }
+}
+
+
+
+
+
+

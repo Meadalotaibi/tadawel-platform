@@ -1,0 +1,194 @@
+/* Global Styles - Dark Glass Theme */
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+html,
+body {
+    height: 100%;
+    font-family: 'Outfit', 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #020a06;
+    color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* RTL Support */
+[dir="rtl"] {
+    font-family: 'Cairo', 'Outfit', sans-serif;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #020a06;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #065f46;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #047857;
+}
+
+/* Firefox scrollbar */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #065f46 #020a06;
+}
+
+/* Selection */
+::selection {
+    background: rgba(16, 185, 129, 0.3);
+    color: #ffffff;
+}
+
+::-moz-selection {
+    background: rgba(16, 185, 129, 0.3);
+    color: #ffffff;
+}
+
+/* ========================================
+   ANGULAR MATERIAL DATEPICKER THEME
+   Glass Effect Dark Theme
+   ======================================== */
+
+/* Datepicker popup/calendar panel */
+.mat-datepicker-content {
+    background: linear-gradient(
+        135deg,
+        rgba(6, 78, 59, 0.95) 0%,
+        rgba(2, 10, 6, 0.98) 100%
+    ) !important;
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    border-radius: 16px !important;
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.7),
+        0 0 0 1px rgba(16, 185, 129, 0.1) inset !important;
+}
+
+/* Calendar header */
+.mat-calendar-header {
+    background: rgba(16, 185, 129, 0.1) !important;
+    border-radius: 12px 12px 0 0;
+    padding: 8px !important;
+}
+
+.mat-calendar-controls {
+    margin: 0 !important;
+}
+
+/* Period button (month/year selector) */
+.mat-calendar-period-button {
+    color: #34d399 !important;
+    font-weight: 600 !important;
+}
+
+.mat-calendar-period-button:hover {
+    background: rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Navigation arrows */
+.mat-calendar-previous-button,
+.mat-calendar-next-button {
+    color: #34d399 !important;
+}
+
+.mat-calendar-previous-button:hover,
+.mat-calendar-next-button:hover {
+    background: rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Weekday labels */
+.mat-calendar-table-header th {
+    color: rgba(255, 255, 255, 0.5) !important;
+    font-weight: 500 !important;
+}
+
+/* Calendar body cells */
+.mat-calendar-body-cell-content {
+    color: #ffffff !important;
+    border-radius: 8px !important;
+}
+
+.mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover 
+> .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    background: rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Selected date */
+.mat-calendar-body-selected {
+    background: #10b981 !important;
+    color: #ffffff !important;
+}
+
+/* Date range selection */
+.mat-calendar-body-in-range::before {
+    background: rgba(16, 185, 129, 0.2) !important;
+}
+
+.mat-calendar-body-range-start:not(.mat-calendar-body-in-comparison-range)::before,
+.mat-calendar-body-range-start::after,
+.mat-calendar-body-comparison-start:not(.mat-calendar-body-comparison-bridge-start)::before,
+.mat-calendar-body-comparison-start::after {
+    background: #10b981 !important;
+}
+
+.mat-calendar-body-range-end:not(.mat-calendar-body-in-comparison-range)::before,
+.mat-calendar-body-range-end::after {
+    background: #10b981 !important;
+}
+
+/* Preview range (while selecting) */
+.mat-calendar-body-preview-start .mat-calendar-body-cell-preview,
+.mat-calendar-body-preview-end .mat-calendar-body-cell-preview {
+    border-color: #34d399 !important;
+}
+
+.mat-calendar-body-in-preview .mat-calendar-body-cell-preview {
+    border-top-color: rgba(52, 211, 153, 0.3) !important;
+    border-bottom-color: rgba(52, 211, 153, 0.3) !important;
+}
+
+/* Today indicator */
+.mat-calendar-body-today:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    border-color: rgba(16, 185, 129, 0.5) !important;
+}
+
+/* Disabled dates */
+.mat-calendar-body-disabled > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected):not(.mat-calendar-body-comparison-identical) {
+    color: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Year/Month view */
+.mat-calendar-body-label {
+    color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* Actions buttons (if any) */
+.mat-datepicker-actions {
+    background: rgba(16, 185, 129, 0.05) !important;
+    border-top: 1px solid rgba(16, 185, 129, 0.15) !important;
+    padding: 8px !important;
+}
+
+/* Touch UI mode */
+.mat-datepicker-content.mat-datepicker-content-touch {
+    max-height: 80vh !important;
+}

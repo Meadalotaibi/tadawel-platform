@@ -1,0 +1,293 @@
+<div class="app-container">
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="nav-content">
+      <div class="nav-logo">
+        <img src="assets/Logo.png" alt="Logo" />
+      </div>
+      <div class="language-switcher">
+        <button (click)="switchLanguage()" class="lang-btn" [class.active]="currentLang === 'en'">
+          {{ translations.language.english }}
+        </button>
+        <button (click)="switchLanguage()" class="lang-btn" [class.active]="currentLang === 'ar'">
+          {{ translations.language.arabic }}
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="content">
+    <header class="glass-header">
+      <h1>{{ translations.title }}</h1>
+      <p class="subtitle">{{ translations.subtitle }}</p>
+    </header>
+
+    <main class="upload-section">
+      <!-- Upload Section - Hidden when analysis is completed -->
+      <div class="glass-card" *ngIf="!analysisCompleted()">
+        <h2 class="card-title">{{ translations.uploadPage.title }}</h2>
+        <p class="upload-instruction">{{ translations.uploadPage.uploadInstruction }}</p>
+
+        <!-- Error Message -->
+        <div *ngIf="error()" class="error-message">
+          <span class="error-icon">⚠️</span>
+          {{ error() }}
+        </div>
+
+        <!-- Success Message -->
+        <div *ngIf="success()" class="success-message">
+          <span class="success-icon">✓</span>
+          {{ success() }}
+        </div>
+
+        <!-- File Upload Areas -->
+        <div class="upload-grid">
+          <!-- Saher Violation File -->
+          <div class="upload-box">
+            <label class="upload-label">{{ translations.uploadPage.saherLabel }}</label>
+            <div class="file-input-wrapper">
+              <input type="file" accept=".xlsx,.xls" (change)="onSaherFileSelected($event)" id="saher-file"
+                class="file-input" />
+              <label for="saher-file" class="file-input-label">
+                <span class="upload-icon">📄</span>
+                <span class="file-name" *ngIf="!saherFile()">
+                  {{ translations.uploadPage.saherPlaceholder }}
+                </span>
+                <span class="file-name selected" *ngIf="saherFile()">
+                  {{ saherFile()?.name }}
+                </span>
+              </label>
+              <button *ngIf="saherFile()" (click)="removeSaherFile()" class="remove-btn">
+                ✕
+              </button>
+            </div>
+          </div>
+
+          <!-- MVA File -->
+          <div class="upload-box">
+            <label class="upload-label">{{ translations.uploadPage.mvaLabel }}</label>
+            <div class="file-input-wrapper">
+              <input type="file" accept=".xlsx,.xls" (change)="onMvaFileSelected($event)" id="mva-file"
+                class="file-input" />
+              <label for="mva-file" class="file-input-label">
+                <span class="upload-icon">📄</span>
+                <span class="file-name" *ngIf="!mvaFile()">
+                  {{ translations.uploadPage.mvaPlaceholder }}
+                </span>
+                <span class="file-name selected" *ngIf="mvaFile()">
+                  {{ mvaFile()?.name }}
+                </span>
+              </label>
+              <button *ngIf="mvaFile()" (click)="removeMvaFile()" class="remove-btn">
+                ✕
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Date Range Picker (Angular Material) -->
+        <div class="date-range-section">
+          <h3 class="date-range-title">{{ translations.dateRange.title }}</h3>
+          
+          <mat-form-field appearance="outline" class="date-range-field">
+            <mat-label>{{ translations.dateRange.startDate }} – {{ translations.dateRange.endDate }}</mat-label>
+            <mat-date-range-input [formGroup]="dateRangeForm" [rangePicker]="picker" [min]="minSelectableDate">
+              <input matStartDate formControlName="start" [placeholder]="translations.dateRange.startDate">
+              <input matEndDate formControlName="end" [placeholder]="translations.dateRange.endDate">
+            </mat-date-range-input>
+            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-date-range-picker #picker></mat-date-range-picker>
+          </mat-form-field>
+          
+          <!-- Date Range Hint (when range not selected) -->
+          <div class="date-range-hint" *ngIf="!isDateRangeComplete()">
+            <span class="hint-icon">ℹ️</span>
+            <span class="hint-text">{{ translations.dateRange.hint }}</span>
+          </div>
+          
+          <!-- Selected Range Display -->
+          <div class="selected-range" *ngIf="isDateRangeComplete()">
+            <span class="range-icon">✓</span>
+            <span class="range-text">
+              {{ getStartDateString() }} → {{ getEndDateString() }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Analyze Button -->
+        <div class="action-area">
+          <button (click)="analyzeData()" class="analyze-btn" [disabled]="!canAnalyze()"
+            [class.analyzing]="analyzing()">
+            <span *ngIf="!analyzing()">{{ translations.uploadPage.analyzeButton }}</span>
+            <span *ngIf="analyzing()" class="spinner-text">
+              <span class="spinner-small"></span>
+              {{ currentLang === 'en' ? 'Processing...' : 'جاري المعالجة...' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Statistics Section - Shown when analysis is completed -->
+      <div class="glass-card statistics-section" *ngIf="analysisCompleted() && statistics()">
+        <h2 class="card-title">{{ translations.statistics.title }}</h2>
+
+        <!-- No Data Message -->
+        <div *ngIf="!hasData()" class="no-data-message">
+          <span class="no-data-icon">📊</span>
+          {{ translations.statistics.noData }}
+        </div>
+
+        <!-- Statistics Content -->
+        <div *ngIf="hasData()" class="statistics-content">
+          <!-- Report Export Root - Contains all exportable content (cards + charts) -->
+          <div id="report-export-root" class="report-export-root">
+            <!-- Summary Cards - 3 Prominent Numbers -->
+            <div class="summary-cards three-cards">
+              <!-- Total Violations (Selected Range) -->
+              <div class="summary-card primary-card">
+                <span class="summary-label">{{ translations.statistics.totalViolationsSelected }}</span>
+                <span class="summary-value large">{{ statistics()?.selectedTotals?.totalViolations }}</span>
+                <span class="summary-subtitle">{{ translations.statistics.selectedRange }}</span>
+              </div>
+              
+              <!-- Weekly Violations (Wed–Tue) -->
+              <div class="summary-card weekly-card">
+                <span class="summary-label">{{ translations.statistics.weeklyViolations }}</span>
+                <span class="summary-value large">{{ statistics()?.weeklyTotals?.totalViolations }}</span>
+                <span class="summary-subtitle">
+                  {{ statistics()?.weeklyTotals?.weeklyStartDate }} → {{ statistics()?.weeklyTotals?.weeklyEndDate }}
+                </span>
+              </div>
+              
+              <!-- Cancels (Selected Range) -->
+              <div class="summary-card cancel-card">
+                <span class="summary-label">{{ translations.statistics.cancelsSelected }}</span>
+                <span class="summary-value large">{{ statistics()?.selectedTotals?.cancels }}</span>
+                <span class="summary-subtitle">{{ translations.statistics.selectedRange }}</span>
+              </div>
+            </div>
+
+            <!-- Charts Dashboard Container - Shared glass effect for both charts -->
+            <div class="charts-dashboard-container" *ngIf="analysisCompleted()">
+              <h3 class="charts-section-title">
+                <span class="charts-icon">📊</span>
+                {{ currentLang === 'en' ? 'Violations Analysis Charts' : 'مخططات تحليل المخالفات' }}
+              </h3>
+              
+              <div class="charts-grid">
+                <!-- SAHER Violations Chart -->
+                <app-saher-chart
+                  [data]="getBusinessLineData()"
+                  [title]="translations.statistics.saherViolationsTable">
+                </app-saher-chart>
+
+                <!-- HSSE Summary Cards -->
+                <div class="hsse-summary-section">
+                  <div class="hsse-summary-cards">
+                    <!-- HSSE Total Card -->
+                    <div class="hsse-summary-card hsse-total-card">
+                      <div class="hsse-card-icon">🛡️</div>
+                      <div class="hsse-card-content">
+                        <span class="hsse-card-label">
+                          {{ currentLang === 'en' ? 'HSSE Total' : 'إجمالي السلامة' }}
+                        </span>
+                        <span class="hsse-card-value">{{ getHsseTotalViolations() }}</span>
+                        <span class="hsse-card-subtitle">
+                          {{ translations.statistics.selectedRange }}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <!-- Weekly HSSE Total Card -->
+                    <div class="hsse-summary-card hsse-weekly-card">
+                      <div class="hsse-card-icon">📅</div>
+                      <div class="hsse-card-content">
+                        <span class="hsse-card-label">
+                          {{ currentLang === 'en' ? 'Weekly HSSE' : 'السلامة الأسبوعية' }}
+                        </span>
+                        <span class="hsse-card-value">{{ getWeeklyHsseViolations() }}</span>
+                        <span class="hsse-card-subtitle">{{ getWeeklyDateRange() }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- HSSE Violations Chart -->
+                <app-hsse-chart
+                  [data]="getHsseData()"
+                  [title]="translations.statistics.hsseViolationsTable">
+                </app-hsse-chart>
+              </div>
+            </div>
+          </div>
+          <!-- End Report Export Root -->
+
+          <!-- Action Buttons -->
+          <div class="results-actions">
+            <!-- Export Dropdown Button -->
+            <button class="export-btn export-dropdown-btn" 
+                    [matMenuTriggerFor]="exportMenu"
+                    [disabled]="isAnyExportInProgress()"
+                    [class.exporting]="isAnyExportInProgress()">
+              <span *ngIf="!isAnyExportInProgress()">
+                <span class="export-icon">📥</span>
+                {{ currentLang === 'en' ? 'Export Report' : 'تصدير التقرير' }}
+                <span class="dropdown-arrow">▼</span>
+              </span>
+              <span *ngIf="isAnyExportInProgress()" class="spinner-text">
+                <span class="spinner-small"></span>
+                {{ currentLang === 'en' ? 'Exporting...' : 'جاري التصدير...' }}
+              </span>
+            </button>
+            
+            <!-- Export Dropdown Menu -->
+            <mat-menu #exportMenu="matMenu" class="export-menu">
+              <button mat-menu-item (click)="exportData()" [disabled]="exporting()">
+                <span class="menu-icon">📄</span>
+                <span class="menu-text">
+                  {{ currentLang === 'en' ? 'Export Excel (Tadawel)' : 'تصدير Excel (تداول)' }}
+                </span>
+                <span *ngIf="exporting()" class="menu-spinner"></span>
+              </button>
+              <button mat-menu-item (click)="exportPptData()" [disabled]="exportingPpt()">
+                <span class="menu-icon">📊</span>
+                <span class="menu-text">
+                  {{ currentLang === 'en' ? 'Export PowerPoint' : 'تصدير PowerPoint' }}
+                </span>
+                <span *ngIf="exportingPpt()" class="menu-spinner"></span>
+              </button>
+              <button mat-menu-item (click)="exportWeeklyPdf()" [disabled]="exportingWeeklyPdf()">
+                <span class="menu-icon">📋</span>
+                <span class="menu-text">
+                  {{ currentLang === 'en' ? 'Weekly PDF Report' : 'تقرير PDF الأسبوعي' }}
+                </span>
+                <span *ngIf="exportingWeeklyPdf()" class="menu-spinner"></span>
+              </button>
+              <button mat-menu-item (click)="exportPdf()" [disabled]="exportingPdf()">
+                <span class="menu-icon">📑</span>
+                <span class="menu-text">
+                  {{ currentLang === 'en' ? 'Export PDF' : 'تصدير PDF' }}
+                </span>
+                <span *ngIf="exportingPdf()" class="menu-spinner"></span>
+              </button>
+              <button mat-menu-item (click)="exportAllAsZip()" [disabled]="exportingZip()">
+                <span class="menu-icon">📦</span>
+                <span class="menu-text">
+                  {{ currentLang === 'en' ? 'Export All (ZIP)' : 'تصدير الكل (ZIP)' }}
+                </span>
+                <span *ngIf="exportingZip()" class="menu-spinner"></span>
+              </button>
+            </mat-menu>
+            
+            <!-- New Analysis Button -->
+            <button (click)="startNewAnalysis()" class="new-analysis-btn">
+              <span class="new-analysis-icon">🔄</span>
+              {{ translations.statistics.newAnalysis }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>

@@ -1,0 +1,4 @@
+/* Import shared glassmorphism chart styles */
+@import '../shared/chart-styles.css';
+
+/* SAHER Chart specific overrides (if any) */
